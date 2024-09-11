@@ -1,15 +1,27 @@
 import sys
 import subprocess
+import importlib
 
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-# Ensure critical packages are installed
-for package in ['streamlit', 'pandas', 'numpy', 'plotly', 'PyPDF2', 'scipy']:
+required_packages = [
+    'streamlit==1.28.0',
+    'pandas==2.1.1',
+    'numpy==1.26.0',
+    'plotly==5.17.0',
+    'PyPDF2==3.0.1',
+    'scipy==1.11.3'
+]
+
+for package in required_packages:
+    package_name = package.split('==')[0]
     try:
-        __import__(package)
+        importlib.import_module(package_name)
     except ImportError:
+        print(f"Installing {package}")
         install(package)
+
 
 # Rest of your imports and code below
 
